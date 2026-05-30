@@ -93,7 +93,9 @@ IMPORTANT
 
 (compilation_unit
   (element
-    (html_comment)))
+    (tag_name)
+    (html_comment)
+    (tag_name)))
 
 ===
 Razor Comment inside element with razor_if
@@ -106,11 +108,15 @@ Razor Comment inside element with razor_if
 
 (compilation_unit
   (element
+    (tag_name)
     (razor_comment)
     (razor_if
       (razor_condition
         (identifier))
-      (element))))
+      (element
+        (tag_name)
+        (tag_name)))
+    (tag_name)))
 
 ===
 Razor Comment between using directives
@@ -130,4 +136,3 @@ Razor Comment between using directives
     (qualified_name
       (identifier)
       (identifier))))
-

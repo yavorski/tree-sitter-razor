@@ -1308,9 +1308,33 @@
     }
   },
   {
+    "type": "attribute_name",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "attribute_target_specifier",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "attribute_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "razor_explicit_expression",
+          "named": true
+        },
+        {
+          "type": "razor_implicit_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "await_expression",
@@ -2649,6 +2673,14 @@
       "required": false,
       "types": [
         {
+          "type": "attribute_name",
+          "named": true
+        },
+        {
+          "type": "attribute_value",
+          "named": true
+        },
+        {
           "type": "element",
           "named": true
         },
@@ -2718,6 +2750,10 @@
         },
         {
           "type": "razor_while",
+          "named": true
+        },
+        {
+          "type": "tag_name",
           "named": true
         }
       ]
@@ -8259,6 +8295,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "tag_name",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "throw_expression",

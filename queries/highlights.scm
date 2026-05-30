@@ -64,3 +64,21 @@
 (razor_attribute_name) @function
 
 (taghelper_wildcard) @character.special
+
+(tag_name) @tag
+
+(attribute_name) @tag.attribute
+
+(attribute_value) @string
+
+[
+  (element
+    ["<" ">" "</" "/>"] @tag.delimiter)
+  (script_element
+    ["<" ">" "</" "/>"] @tag.delimiter)
+  (style_element
+    ["<" ">" "</" "/>"] @tag.delimiter)
+]
+
+(element
+  "=" @operator)

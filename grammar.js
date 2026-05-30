@@ -475,7 +475,7 @@ module.exports = grammar(CSHARP, {
 
     // HTML Base Definitions
     _tag_name: (_) => /[a-zA-Z0-9-:]+/,
-    _end_tag: ($) => seq("</", $._tag_name, ">"),
+    _end_tag: ($) => seq("</", alias($._tag_name, $.tag_name), ">"),
     _html_attribute_name: (_) => /[a-zA-Z0-9-:]+/,
     _boolean_html_attribute: (_) => /[a-zA-Z0-9-:]+/,
     _html_attribute_value: ($) =>
@@ -496,7 +496,7 @@ module.exports = grammar(CSHARP, {
       seq('"', optional($.modifier), $.expression, '"'),
 
     _html_attribute: ($) =>
-      seq($._html_attribute_name, "=", $._html_attribute_value),
+      seq(alias($._html_attribute_name, $.attribute_name), "=", alias($._html_attribute_value, $.attribute_value)),
 
     razor_html_attribute: ($) =>
       seq($.razor_attribute_name, optional(seq("=", $.razor_attribute_value))),
@@ -504,7 +504,7 @@ module.exports = grammar(CSHARP, {
     element: ($) =>
       seq(
         "<",
-        $._tag_name,
+        alias($._tag_name, $.tag_name),
         optional(
           repeat(
             prec.left(
