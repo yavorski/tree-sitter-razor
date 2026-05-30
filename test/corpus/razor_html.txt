@@ -85,7 +85,7 @@ razor section
 (compilation_unit
   (razor_section
     (identifier)
-    (element
+    (script_element
       (tag_name)
       (attribute_name)
       (attribute_value)

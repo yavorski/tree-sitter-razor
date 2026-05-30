@@ -9,8 +9,54 @@
 
 const CSHARP = require("tree-sitter-c-sharp/grammar").default;
 
+/**
+ * Build a raw-text element rule (e.g. <script>...</script>, <style>...</style>).
+ * The body is treated as opaque text interrupted only by razor expressions /
+ * comments and terminated by the matching closing tag.
+ *
+ * @param {GrammarSymbols<string>} $
+ * @param {string} name - tag literal, e.g. "script" or "style"
+ */
+function rawTextElement($, name) {
+  return prec(
+    1,
+    seq(
+      "<",
+      alias(token(prec(1, name)), $.tag_name),
+      optional(
+        repeat(
+          prec.left(
+            seq(
+              choice(
+                $._html_attribute,
+                $._boolean_html_attribute,
+                $.razor_html_attribute,
+              ),
+              optional(" "),
+            ),
+          ),
+        ),
+      ),
+      ">",
+      repeat(
+        choice(
+          alias($._raw_text, $.raw_text),
+          $.razor_comment,
+          $.razor_implicit_expression,
+          $.razor_explicit_expression,
+        ),
+      ),
+      "</",
+      alias(token(prec(1, name)), $.tag_name),
+      ">",
+    ),
+  );
+}
+
 module.exports = grammar(CSHARP, {
   name: "razor",
+
+  externals: ($, o) => [...o, $._raw_text],
 
   extras: ($) => [$.comment, /\s+/],
 
@@ -121,6 +167,8 @@ module.exports = grammar(CSHARP, {
           $.razor_section,
           $.razor_compound_using,
           $.razor_lock,
+          $.script_element,
+          $.style_element,
           $.element,
           $.html_comment,
         ),
@@ -524,5 +572,11 @@ module.exports = grammar(CSHARP, {
           seq(">", repeat(choice($._node, $._html_text)), $._end_tag),
         ),
       ),
+
+    // Raw-text elements: bodies are treated as opaque text interrupted only
+    // by razor expressions/comments and the matching closing tag.
+    script_element: ($) => rawTextElement($, "script"),
+
+    style_element: ($) => rawTextElement($, "style"),
   },
 });

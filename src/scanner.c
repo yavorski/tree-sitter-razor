@@ -17,6 +17,7 @@ enum TokenType {
     RAW_STRING_START,
     RAW_STRING_END,
     RAW_STRING_CONTENT,
+    RAW_TEXT,
 };
 
 typedef enum {
@@ -113,6 +114,38 @@ bool tree_sitter_razor_external_scanner_scan(void *payload, TSLexer *lexer, cons
     uint8_t brace_advanced = 0;
     uint8_t quote_count = 0;
     bool did_advance = false;
+
+    // RAW_TEXT: greedy run of characters not starting with '<' or single '@'.
+    // Used inside <script> and <style> bodies; razor expressions (@...) and
+    // the closing tag (</script>, </style>) interrupt it. A doubled '@@' is
+    // a razor escape for a literal '@' and is consumed as part of raw text.
+    if (valid_symbols[RAW_TEXT] &&
+        !valid_symbols[INTERPOLATION_REGULAR_START] &&
+        !valid_symbols[RAW_STRING_START]) {
+        bool consumed = false;
+        while (lexer->lookahead != 0 && lexer->lookahead != '<') {
+            if (lexer->lookahead == '@') {
+                advance(lexer);
+                if (lexer->lookahead == '@') {
+                    advance(lexer);
+                    lexer->mark_end(lexer);
+                    consumed = true;
+                    continue;
+                }
+                // single '@' starts a razor expression; do not include it
+                // in raw_text. mark_end was last set before this '@'.
+                break;
+            }
+            advance(lexer);
+            lexer->mark_end(lexer);
+            consumed = true;
+        }
+        if (consumed) {
+            lexer->result_symbol = RAW_TEXT;
+            return true;
+        }
+        return false;
+    }
 
     // error recovery, gives better trees this way
     if (valid_symbols[OPT_SEMI] && valid_symbols[INTERPOLATION_REGULAR_START]) {

@@ -1,0 +1,87 @@
+==================
+Empty script element
+==================
+
+<script></script>
+
+---
+
+(compilation_unit
+  (script_element
+    (tag_name)
+    (tag_name)))
+
+==================
+Script with body
+==================
+
+<script>
+  var x = 1;
+  if (x > 0) { console.log(x); }
+</script>
+
+---
+
+(compilation_unit
+  (script_element
+    (tag_name)
+    (raw_text)
+    (tag_name)))
+
+==================
+Script with attributes and razor expression
+==================
+
+<script type="text/javascript">
+  var id = '@uniqueId';
+  var n  = '@(uniqueId)-x';
+</script>
+
+---
+
+(compilation_unit
+  (script_element
+    (tag_name)
+    (attribute_name)
+    (attribute_value)
+    (raw_text)
+    (razor_implicit_expression
+      (identifier))
+    (raw_text)
+    (razor_implicit_expression
+      (cast_expression
+        (identifier)
+        (prefix_unary_expression
+          (identifier))))
+    (raw_text)
+    (tag_name)))
+
+==================
+Empty style element
+==================
+
+<style></style>
+
+---
+
+(compilation_unit
+  (style_element
+    (tag_name)
+    (tag_name)))
+
+==================
+Style with body
+==================
+
+<style>
+  .foo { color: red; }
+  @@media (min-width: 800px) { .bar { display: none; } }
+</style>
+
+---
+
+(compilation_unit
+  (style_element
+    (tag_name)
+    (raw_text)
+    (tag_name)))
