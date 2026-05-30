@@ -5967,7 +5967,6 @@
   {
     "type": "razor_comment",
     "named": true,
-    "extra": true,
     "fields": {}
   },
   {

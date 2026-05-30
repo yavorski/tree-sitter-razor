@@ -12,10 +12,11 @@ const CSHARP = require("tree-sitter-c-sharp/grammar").default;
 module.exports = grammar(CSHARP, {
   name: "razor",
 
-  extras: ($) => [$.razor_comment, $.comment, /\s+/],
+  extras: ($) => [$.comment, /\s+/],
 
   conflicts: ($, o) => [
     [$.razor_explicit_expression, $._expression_statement_expression],
+    [$.compilation_unit, $._node],
 
     [
       $.preproc_if,
@@ -56,6 +57,7 @@ module.exports = grammar(CSHARP, {
         repeat(
           choice(
             $.shebang_directive, // this is to make sharing highlights easier
+            $.razor_comment,
             $.razor_page_directive,
             $.razor_using_directive,
             $.razor_model_directive,

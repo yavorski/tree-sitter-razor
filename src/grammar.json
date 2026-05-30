@@ -18,6 +18,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "razor_comment"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "razor_page_directive"
               },
               {
@@ -14240,10 +14244,6 @@
   "extras": [
     {
       "type": "SYMBOL",
-      "name": "razor_comment"
-    },
-    {
-      "type": "SYMBOL",
       "name": "comment"
     },
     {
@@ -14255,6 +14255,10 @@
     [
       "razor_explicit_expression",
       "_expression_statement_expression"
+    ],
+    [
+      "compilation_unit",
+      "_node"
     ],
     [
       "preproc_if",

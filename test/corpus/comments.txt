@@ -94,3 +94,40 @@ IMPORTANT
 (compilation_unit
   (element
     (html_comment)))
+
+===
+Razor Comment inside element with razor_if
+===
+<div>
+  @* a razor comment *@
+  @if (x) { <span>y</span> }
+</div>
+---
+
+(compilation_unit
+  (element
+    (razor_comment)
+    (razor_if
+      (razor_condition
+        (identifier))
+      (element))))
+
+===
+Razor Comment between using directives
+===
+@*
+  header
+*@
+@using System
+@using System.Linq
+---
+
+(compilation_unit
+  (razor_comment)
+  (razor_using_directive
+    (identifier))
+  (razor_using_directive
+    (qualified_name
+      (identifier)
+      (identifier))))
+
